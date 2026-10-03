@@ -1,4 +1,4 @@
-# Wazuh SOC Home Lab – Windows Security Monitoring & Incident Detection
+# Wazuh SOC Home Lab - Windows Security Monitoring & Incident Detection
 
 ## Overview
 
@@ -30,7 +30,6 @@ Wazuh Dashboard
    |
    v
 SOC Investigation
-
 Technologies Used
 Wazuh 4.14.7
 Wazuh Agent
@@ -42,7 +41,6 @@ Docker & Docker Compose
 Windows 11 Pro
 PowerShell
 MITRE ATT&CK
-
 Lab Environment
 Component	Configuration
 Endpoint	Windows 11 Pro
@@ -53,7 +51,6 @@ Telemetry	Windows Event Logs + Sysmon
 Container Platform	Docker
 Network	Local SOC lab
 Detection Framework	MITRE ATT&CK
-
 Windows Endpoint Monitoring
 
 The Windows endpoint was configured with:
@@ -88,17 +85,23 @@ Tactic: Execution
 This demonstrated the complete detection pipeline:
 
 Windows Activity
-      ↓
+      |
+      v
 Sysmon Event
-      ↓
+      |
+      v
 Wazuh Agent
-      ↓
+      |
+      v
 Wazuh Manager
-      ↓
+      |
+      v
 Detection Rule
-      ↓
+      |
+      v
 MITRE ATT&CK Mapping
-      ↓
+      |
+      v
 SOC Investigation
 Alert Investigation
 PowerShell Detection
@@ -190,15 +193,15 @@ Docker
 Wazuh
 Project Structure
 Wazuh-SOC-Home-Lab/
-│
-├── README.md
-├── .gitignore
-│
-└── Screenshots/
-    ├── 01-PowerShell-Detection.png
-    ├── 02-Endpoint-Overview.png
-    ├── 03-PowerShell-Sysmon-Investigation.png
-    └── 04-DLL-Search-Order-Alert.png
+|
++-- README.md
++-- .gitignore
+|
++-- Screenshots/
+    +-- 01-PowerShell-Detection.png
+    +-- 02-Endpoint-Overview.png
+    +-- 03-PowerShell-Sysmon-Investigation.png
+    +-- 04-DLL-Search-Order-Alert.png
 Disclaimer
 
 This project is a controlled home lab created for cybersecurity learning and SOC analyst skill development. Detection tests were performed on the user's own Windows environment.
@@ -208,4 +211,5 @@ Author
 Sai Tejasvi Tumuluri
 
 B.Tech Computer Science Engineering Graduate
+
 Aspiring SOC Analyst / Cybersecurity Analyst
