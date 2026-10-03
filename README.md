@@ -1,70 +1,208 @@
-\# Wazuh SOC Home Lab – Windows Security Monitoring \& Incident Detection
+# Wazuh SOC Home Lab – Windows Security Monitoring & Incident Detection
 
+## Overview
 
+This project is a hands-on Security Operations Center (SOC) home lab built using Wazuh, Docker, Windows, Sysmon, and PowerShell.
 
-\## Overview
+The lab demonstrates how a SOC analyst can collect Windows security telemetry, detect suspicious activity, investigate alerts, correlate events with endpoint activity, and map detections to MITRE ATT&CK techniques.
 
-
-
-This project is a hands-on Security Operations Center (SOC) home lab built using Wazuh, Docker, Windows, and Sysmon.
-
-
-
-The goal was to simulate a real SOC monitoring environment where Windows security telemetry is collected, analyzed, mapped to MITRE ATT\&CK techniques, and investigated as security alerts.
-
-
-
-\## Architecture
-
-
+## Architecture
 
 ```text
+Windows 11 Pro Endpoint
+        |
+        | Sysmon Telemetry
+        v
+Wazuh Agent
+Windows-SOC-Endpoint (Agent 003)
+        |
+        | TCP 1514
+        v
+Wazuh Manager
+        |
+   +----+----+
+   |         |
+   v         v
+Indexer   Analysis Engine
+   |
+   v
+Wazuh Dashboard
+   |
+   v
+SOC Investigation
+Technologies Used
+Wazuh 4.14.7
+Wazuh Agent
+Wazuh Manager
+Wazuh Indexer
+Wazuh Dashboard
+Sysmon
+Docker & Docker Compose
+Windows 11 Pro
+PowerShell
+MITRE ATT&CK
+Lab Environment
+Component	Configuration
+Endpoint	Windows 11 Pro
+SIEM/XDR Platform	Wazuh 4.14.7
+Agent	Windows-SOC-Endpoint
+Agent ID	003
+Telemetry	Windows Event Logs + Sysmon
+Container Platform	Docker
+Network	Local SOC lab
+Detection Framework	MITRE ATT&CK
+Windows Endpoint Monitoring
 
-&#x20;                   Windows Endpoint
+The Windows endpoint was configured with:
 
-&#x20;                 Windows 11 Pro
+Wazuh Agent
+Sysmon
+Windows Event Channel monitoring
+Process creation monitoring
+File creation monitoring
+PowerShell activity monitoring
 
-&#x20;                       |
+Sysmon provides detailed endpoint telemetry such as process creation, process termination, file creation, and other system activity.
 
-&#x20;                       | Sysmon Events
+Detection Test
 
-&#x20;                       |
+A controlled PowerShell activity was generated on the Windows endpoint:
 
-&#x20;                       v
+Start-Process powershell.exe -ArgumentList '-NoProfile -Command "Write-Output SOC-Test-Event"'
 
-&#x20;                Wazuh Agent
+Wazuh successfully detected the resulting Sysmon process creation event.
 
-&#x20;             Windows-SOC-Endpoint
+The detection generated:
 
-&#x20;                    Agent 003
+Rule ID: 92027
+Severity: Level 4
+Event: PowerShell process spawned PowerShell instance
+Sysmon Event ID: 1
+MITRE ATT&CK: T1059.001
+Technique: PowerShell
+Tactic: Execution
 
-&#x20;                       |
+This demonstrated the complete detection pipeline:
 
-&#x20;                       | TCP 1514
+Windows Activity
+      ↓
+Sysmon Event
+      ↓
+Wazuh Agent
+      ↓
+Wazuh Manager
+      ↓
+Detection Rule
+      ↓
+MITRE ATT&CK Mapping
+      ↓
+SOC Investigation
+Alert Investigation
+PowerShell Detection
 
-&#x20;                       v
+Investigated Wazuh Rule 92027 for PowerShell execution.
 
-&#x20;                Wazuh Manager
+The investigation included:
 
-&#x20;                       |
+Process information
+Command-line activity
+Sysmon Event ID 1
+User context
+Process ID
+MITRE ATT&CK mapping
+DLL Search Order Hijacking Alert
 
-&#x20;             +---------+---------+
+Investigated Wazuh Rule 92219, which detected activity associated with possible DLL Search Order Hijacking.
 
-&#x20;             |                   |
+The investigation included:
 
-&#x20;             v                   v
+Sysmon Event ID 11
+DLL creation path
+Process correlation
+Process ID investigation
+Windows service correlation
+File existence verification
 
-&#x20;       Wazuh Indexer       Wazuh Analysis
+The associated process was correlated with the Windows StorSvc service running under svchost.exe.
 
-&#x20;             |
+The suspicious DLL was no longer present during the investigation, so the alert was treated as an investigation case rather than automatically classified as malicious.
 
-&#x20;             v
+False-Positive Investigation
 
-&#x20;       Wazuh Dashboard
+Rule 92213 generated an alert for an executable created in a directory commonly associated with malware activity.
 
-&#x20;             |
+Further investigation showed activity associated with legitimate software such as:
 
-&#x20;             v
+Microsoft Edge WebView
+Docker Desktop updater
+PowerShell temporary files
 
-&#x20;       SOC Investigation
+This demonstrates the importance of validating alerts with endpoint context instead of treating every detection as malicious.
 
+SOC Investigation Workflow
+
+The project followed a basic SOC investigation workflow:
+
+Detect security event
+Review Wazuh alert
+Identify rule and severity
+Examine Sysmon telemetry
+Review process and file information
+Correlate process IDs and Windows services
+Check whether the artifact still exists
+Map the activity to MITRE ATT&CK
+Determine whether additional investigation is required
+Document the findings
+Project Evidence
+1. PowerShell Detection
+
+Wazuh Threat Hunting showing the PowerShell detection generated from Sysmon telemetry.
+
+2. Endpoint Overview
+
+Wazuh endpoint overview showing monitoring and security telemetry for the Windows endpoint.
+
+3. PowerShell + Sysmon Investigation
+
+Detailed investigation of the PowerShell detection including Sysmon event data and MITRE ATT&CK mapping.
+
+4. DLL Search Order Alert
+
+Investigation of a DLL Search Order Hijacking detection generated by Wazuh.
+
+Skills Demonstrated
+SOC Monitoring
+Security Alert Investigation
+Windows Event Analysis
+Sysmon
+PowerShell
+Log Analysis
+Endpoint Monitoring
+Threat Detection
+MITRE ATT&CK
+False-Positive Analysis
+Process Investigation
+Windows Service Investigation
+Docker
+Wazuh
+Project Structure
+Wazuh-SOC-Home-Lab/
+│
+├── README.md
+├── .gitignore
+│
+└── Screenshots/
+    ├── 01-PowerShell-Detection.png
+    ├── 02-Endpoint-Overview.png
+    ├── 03-PowerShell-Sysmon-Investigation.png
+    └── 04-DLL-Search-Order-Alert.png
+Disclaimer
+
+This project is a controlled home lab created for cybersecurity learning and SOC analyst skill development. Detection tests were performed on the user's own Windows environment.
+
+Author
+
+Sai Tejasvi Tumuluri
+
+B.Tech Computer Science Engineering Graduate
+Aspiring SOC Analyst / Cybersecurity Analyst
