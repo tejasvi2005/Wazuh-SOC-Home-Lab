@@ -30,6 +30,7 @@ Wazuh Dashboard
    |
    v
 SOC Investigation
+
 Technologies Used
 Wazuh 4.14.7
 Wazuh Agent
@@ -41,6 +42,7 @@ Docker & Docker Compose
 Windows 11 Pro
 PowerShell
 MITRE ATT&CK
+
 Lab Environment
 Component	Configuration
 Endpoint	Windows 11 Pro
@@ -51,6 +53,7 @@ Telemetry	Windows Event Logs + Sysmon
 Container Platform	Docker
 Network	Local SOC lab
 Detection Framework	MITRE ATT&CK
+
 Windows Endpoint Monitoring
 
 The Windows endpoint was configured with:
